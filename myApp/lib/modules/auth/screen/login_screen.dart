@@ -4,12 +4,8 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http_request/modules/auth/bloc/auth_bloc.dart';
-import 'package:http_request/modules/auth/model/user_model.dart';
-import 'package:http_request/modules/home/screen/home_screen.dart';
-import 'package:http_request/networking/response.dart';
 import 'package:http_request/utils/showAlert.dart';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 

@@ -8,6 +8,7 @@ import 'package:http_request/modules/home/screen/home_screen.dart';
 import 'package:http_request/modules/product_detail/screen/product_detail_screen.dart';
 import 'package:http_request/modules/product/screen/products_screen.dart';
 import 'package:http_request/modules/search/screen/search_screen.dart';
+import 'package:http_request/modules/splash_screen/screen/splash_screen.dart';
 import 'package:http_request/modules/user/screen/user_screen.dart';
 
 void main() => runApp(MyApp());
@@ -28,10 +29,10 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        primaryColor: Color(0xFF30C591),
         scaffoldBackgroundColor: Colors.grey[200],
       ),
-      home: HomeScreen(),
+      home: SplashScreen(),
       routes: {
         "/home": (context) => HomeScreen(),
         "/login": (context) => LoginScreen(),
