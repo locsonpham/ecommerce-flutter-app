@@ -4,6 +4,8 @@ import 'package:http_request/modules/order/model/order_model.dart';
 import 'package:http_request/networking/response.dart';
 import 'package:http_request/pages/loading_screen.dart';
 
+import 'order_detail_screen.dart';
+
 class CheckOutScreen extends StatefulWidget {
   OrderInfo order;
 
@@ -97,7 +99,14 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
             ),
           ),
           RaisedButton(
-            onPressed: () {},
+            onPressed: () {
+              ;
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => OrderDetailScreen(
+                          snapshot.data.data.data["order_id"])));
+            },
             color: Colors.orangeAccent,
             child: Padding(
               padding: EdgeInsets.all(10),

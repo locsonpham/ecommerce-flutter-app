@@ -6,6 +6,8 @@ import 'package:http_request/modules/recent_view/screen/recentview_screen.dart';
 import 'package:http_request/modules/wishlist/screen/wishlist_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'profile_screen.dart';
+
 class UserScreen extends StatefulWidget {
   @override
   _UserScreenState createState() => _UserScreenState();
@@ -64,7 +66,10 @@ class _UserScreenState extends State<UserScreen> {
           child: Column(
             children: <Widget>[
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ProfileScreen()));
+                },
                 child: Padding(
                     padding: EdgeInsets.all(10),
                     child: Row(
@@ -189,31 +194,6 @@ class _UserScreenState extends State<UserScreen> {
               Container(height: 1, color: Colors.grey),
               SizedBox(
                 height: 50,
-              ),
-              GestureDetector(
-                onTap: () {
-                  _clearUserData();
-                  Navigator.push((context),
-                      MaterialPageRoute(builder: (context) => HomeScreen()));
-                },
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Container(
-                      width: 150,
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.red[300],
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      child: Center(
-                          child: Text(
-                        "Log out",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                        ),
-                      ))),
-                ),
               ),
             ],
           ),

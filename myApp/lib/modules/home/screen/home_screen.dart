@@ -19,6 +19,7 @@ import 'package:http_request/utils/number_format.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../networking/response.dart';
+import '../../widget/cart_widget.dart';
 import '../model/home_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,6 +30,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   HomeBloc _homeBloc;
   CartBloc _cartBloc;
+  CartTotalBloc _cartTotalBloc;
   var _selectedIndex = 0;
   String _access_token;
   bool _isUserExist = false;
@@ -40,6 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _homeBloc = new HomeBloc();
     _cartBloc = new CartBloc();
+    _cartTotalBloc = new CartTotalBloc();
+    _cartTotalBloc.getCartTotal();
     getAccessToken();
     _cartBloc.getCartTotal().then((value) {
       setState(() {
@@ -83,13 +87,13 @@ class _HomeScreenState extends State<HomeScreen> {
           icon: Icon(Icons.search),
         ),
         // Phone
-        IconButton(
-          icon: Icon(Icons.phone),
-          onPressed: () {},
-        ),
+        // IconButton(
+        //   icon: Icon(Icons.phone),
+        //   onPressed: () {},
+        // ),
         // Cart
         IconButton(
-          icon: cartWidget(context, cartTotal),
+          icon: cartWidget(context, _cartTotalBloc),
           onPressed: () {},
         )
       ],

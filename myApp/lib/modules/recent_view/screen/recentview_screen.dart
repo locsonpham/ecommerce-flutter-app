@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
@@ -15,6 +16,8 @@ import 'package:http_request/pages/loading_screen.dart';
 import 'package:http_request/pages/product_widget.dart';
 import 'package:http_request/utils/showAlert.dart';
 
+import '../../product_detail/model/product_detail_model.dart';
+
 class RecentViewScreen extends StatefulWidget {
   @override
   _RecentViewScreenState createState() => _RecentViewScreenState();
@@ -24,6 +27,7 @@ class _RecentViewScreenState extends State<RecentViewScreen> {
   RecentViewBloc _bloc;
   ProductDetailService _productService;
   List<ProductModel> _products;
+  StreamController _stream;
 
   @override
   void initState() {
@@ -31,12 +35,11 @@ class _RecentViewScreenState extends State<RecentViewScreen> {
     super.initState();
     _bloc = RecentViewBloc();
     _products = List<ProductModel>();
+    _stream = StreamController<List<ProductModel>>();
     _bloc.getRecentProduct().then((productsJson) {
-      setState(() {
-        _products = List<ProductModel>.from(
-            productsJson.map((x) => ProductModel.fromJson(jsonDecode(x))));
-        // print(_products);
-      });
+      _products = List<ProductModel>.from(
+          productsJson.map((x) => ProductModel.fromJson(jsonDecode(x))));
+      _stream.sink.add(_products);
     });
   }
 
@@ -66,43 +69,54 @@ class _RecentViewScreenState extends State<RecentViewScreen> {
     num _aspectWidth = 2;
     num _aspectHeight = 1.5;
 
-    if (_products.isEmpty) {
-      return Padding(
-        padding: EdgeInsets.all(10),
-        child: Text(
-          "Chưa xem gì",
-          style: TextStyle(fontSize: 18),
-        ),
-      );
-    }
+    return StreamBuilder<List<ProductModel>>(
+        stream: _stream.stream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            _products = snapshot.data;
 
-    return Container(
-      child: Container(
-          // height: 1000,
-          margin: EdgeInsets.symmetric(
-            horizontal: 10,
-          ),
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            // border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            children: <Widget>[
-              GridView.count(
-                shrinkWrap: true,
-                primary: false,
-                crossAxisSpacing: 0.0,
-                mainAxisSpacing: 0.0,
-                childAspectRatio: (_aspectHeight / _aspectWidth),
-                crossAxisCount: _countValue,
-                children: List.generate(
-                  _products.length,
-                  (index) => productWidget(context, _products[index]),
+            if (_products.isEmpty) {
+              return Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  "Chưa xem gì",
+                  style: TextStyle(fontSize: 18),
                 ),
-              )
-            ],
-          )),
-    );
+              );
+            }
+            return Container(
+                // height: 1000,
+                margin: EdgeInsets.symmetric(
+                  horizontal: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  // border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  children: <Widget>[
+                    GridView.count(
+                      shrinkWrap: true,
+                      primary: false,
+                      crossAxisSpacing: 0.0,
+                      mainAxisSpacing: 0.0,
+                      childAspectRatio: (_aspectHeight / _aspectWidth),
+                      crossAxisCount: _countValue,
+                      children: List.generate(
+                        _products.length,
+                        (index) {
+                          if (_products[index].name == null ||
+                              _products[index].image == null)
+                            return Container();
+                          return productWidget(context, _products[index]);
+                        },
+                      ),
+                    )
+                  ],
+                ));
+          }
+          return Container();
+        });
   }
 }

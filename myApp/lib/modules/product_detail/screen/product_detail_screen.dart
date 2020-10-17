@@ -14,6 +14,8 @@ import 'package:http_request/utils/number_format.dart';
 import 'package:http_request/utils/showAlert.dart';
 import 'package:http_request/utils/string_utils.dart';
 
+import '../../widget/cart_widget.dart';
+
 class ProductDetailScreen extends StatefulWidget {
   int product_id;
 
@@ -26,6 +28,7 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   ProductDetailBloc _bloc;
   CartBloc _cartBloc;
+  CartTotalBloc _cartTotalBloc;
   RecentViewBloc _recentViewBloc;
   int quantity = 1;
   bool _isFavorite = false;
@@ -37,6 +40,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     super.initState();
     _bloc = new ProductDetailBloc();
     _cartBloc = new CartBloc();
+    _cartTotalBloc = new CartTotalBloc();
+    _cartTotalBloc.getCartTotal();
     _recentViewBloc = RecentViewBloc();
     _bloc.fetchProductDetailById(widget.product_id);
     _bloc.getFavorite(widget.product_id).then((result) {
@@ -106,7 +111,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           actions: <Widget>[
             // Cart
             IconButton(
-              icon: cartWidget(context, cartTotal),
+              icon: cartWidget(context, _cartTotalBloc),
               onPressed: () {},
             )
           ],
@@ -453,7 +458,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     _cartBloc.getCartTotal().then((result) {
       // print(result);
       setState(() {
-        cartTotal = result;
+        _cartTotalBloc.cartTotalSink.add(result);
       });
     });
   }

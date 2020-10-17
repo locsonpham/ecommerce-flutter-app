@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   startTimeout() {
-    var duration = const Duration(seconds: 5);
+    var duration = const Duration(seconds: 3);
     return new Timer(duration, () {
       Navigator.pushNamed(context, "/home");
     });

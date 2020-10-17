@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
       ),
       home: SplashScreen(),
       routes: {
+        // "/mainScreen": (context) => new bottomNavigationBar();
         "/home": (context) => HomeScreen(),
         "/login": (context) => LoginScreen(),
         "/register": (context) => RegisterScreen(),
