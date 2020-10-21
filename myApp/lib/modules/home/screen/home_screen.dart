@@ -64,19 +64,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: _buildAppBar(context),
-        body: _bodyBuilder(context),
-        bottomNavigationBar: _buildBottomNav(
-          context,
-        ));
+      appBar: _buildAppBar(context),
+      body: _bodyBuilder(context),
+      // bottomNavigationBar: _buildBottomNav(
+      //   context,
+      // ),
+    );
   }
 
   Widget _buildAppBar(BuildContext context) {
     return AppBar(
-      leading: IconButton(
-        onPressed: () {},
-        icon: Icon(Icons.menu),
-      ),
+      leading: new Container(),
       // title: TextBox(),
       actions: <Widget>[
         // Search
@@ -101,23 +99,23 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onItemTapped(int index) {
-    // setState(() {
-    //   _selectedIndex = index;
-    // });
-    if (index == 3) {
-      Navigator.pushNamed(context, "/cart");
-    }
-    if (index == 4) {
-      getAccessToken().then((isExist) {
-        if (isExist == false) {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => LoginScreen()));
-        } else {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => UserScreen()));
-        }
-      });
-    }
+    setState(() {
+      _selectedIndex = index;
+    });
+    // if (index == 3) {
+    //   Navigator.pushNamed(context, "/cart");
+    // }
+    // if (index == 4) {
+    //   getAccessToken().then((isExist) {
+    //     if (isExist == false) {
+    //       Navigator.push(
+    //           context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    //     } else {
+    //       Navigator.push(
+    //           context, MaterialPageRoute(builder: (context) => UserScreen()));
+    //     }
+    //   });
+    // }
   }
 
   static const List<Widget> _screenOptions = <Widget>[

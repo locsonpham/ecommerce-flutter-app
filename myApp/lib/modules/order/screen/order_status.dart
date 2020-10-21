@@ -30,6 +30,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: new Container(),
         title: Text("Đặt hàng"),
       ),
       body: _bodyBuilder(context),

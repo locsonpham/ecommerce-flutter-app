@@ -52,11 +52,12 @@ class CartBloc {
     }
   }
 
-  removeCart(String cartId) async {
+  Future<ServerResponse> removeCart(String cartId) async {
     try {
       // cartSink.add(Response.loading("Loading"));
-      ServerResponse cartList = await _cartService.removeCart(cartId);
-      getCartList();
+      ServerResponse response = await _cartService.removeCart(cartId);
+      return response;
+      // getCartList();
       // cartSink.add(Response.completed(cartList));
     } catch (e) {
       cartSink.addError(Response.error(e.toString()));

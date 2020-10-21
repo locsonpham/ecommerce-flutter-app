@@ -48,7 +48,6 @@ class _SearchScreenState extends State<SearchScreen> {
         children: <Widget>[
           _searchInput(context),
           _recentSearchKey(context),
-          // _searchResult(context)
         ],
       )),
     );
@@ -58,20 +57,36 @@ class _SearchScreenState extends State<SearchScreen> {
     return Padding(
       padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
       child: Container(
-        padding: const EdgeInsets.all(10),
+        height: 50,
+        padding:
+            const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
         decoration: BoxDecoration(
           color: Colors.white,
+          borderRadius: BorderRadius.circular(50),
         ),
         child: TextFormField(
           controller: searchInputController,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+          ),
           onChanged: (value) {},
           onEditingComplete: () {
-            _bloc.addSearchKeyList(searchInputController.value.text);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => SearchResultScreen(
-                        searchInputController.value.text, 1)));
+            _bloc
+                .addSearchKeyList(searchInputController.value.text)
+                .then((result) {
+              if (result == true) {
+                _bloc.getSearchKeyList().then((result) {
+                  setState(() {
+                    _recentSearch = result;
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SearchResultScreen(
+                                searchInputController.value.text, 1)));
+                  });
+                });
+              }
+            });
           },
           onFieldSubmitted: (value) {},
         ),
@@ -113,77 +128,12 @@ class _SearchScreenState extends State<SearchScreen> {
                 margin: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
                     border: Border.all(color: Colors.grey)),
                 child: Center(child: Text(_recentSearch[index])),
               ),
             );
           }),
-    );
-  }
-
-  Widget _searchResult(BuildContext context) {
-    return Container(
-      child: StreamBuilder<Response<SearchResponse>>(
-        stream: _bloc.searchDataStream,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            switch (snapshot.data.status) {
-              case Status.LOADING:
-                return loadingScreen2();
-              case Status.COMPLETED:
-                return _productsScreen(context, snapshot);
-              case Status.ERROR:
-                return Container(
-                  child: Text('error'),
-                );
-            }
-          }
-          return Container();
-        },
-      ),
-    );
-  }
-
-  Widget _productsScreen(BuildContext context, AsyncSnapshot snapshot) {
-    num _countValue = 2;
-    num _aspectWidth = 2;
-    num _aspectHeight = 1.5;
-
-    List<ProductModel> _products =
-        List<ProductModel>.from(snapshot.data.data.data["products"].map((x) {
-      return ProductModel.fromJson(x);
-    }));
-
-    // print(_products);
-
-    return Container(
-      child: Container(
-          // height: 1000,
-          margin: EdgeInsets.symmetric(
-            horizontal: 10,
-          ),
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            // border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            children: <Widget>[
-              GridView.count(
-                shrinkWrap: true,
-                primary: false,
-                crossAxisSpacing: 0.0,
-                mainAxisSpacing: 0.0,
-                childAspectRatio: (_aspectHeight / _aspectWidth),
-                crossAxisCount: _countValue,
-                children: List.generate(
-                  _products.length,
-                  (index) => productWidget(context, _products[index]),
-                ),
-              )
-            ],
-          )),
     );
   }
 }

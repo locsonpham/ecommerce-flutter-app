@@ -83,7 +83,7 @@ class ApiProvider {
     return responseJson;
   }
 
-  Future<dynamic> delete(String uri, Map<String, dynamic> params) async {
+  Future<dynamic> delete(String uri) async {
     var responseJson;
     final SharedPreferences prefs = await _prefs;
     var _access_token = (prefs.getString('access_token') ?? null);
@@ -95,8 +95,15 @@ class ApiProvider {
       _headers['Authorization'] = 'Bearer ${_access_token}';
     }
 
-    // dio.Response response = await dio;
-
+    try {
+      final response = await http.delete(
+        _baseUrl + uri,
+        headers: _headers,
+      );
+      responseJson = _response(response);
+    } on SocketException {
+      throw FetchDataException('No Internet connection');
+    }
     return responseJson;
   }
 

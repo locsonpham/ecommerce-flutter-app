@@ -116,7 +116,13 @@ class _RecentViewScreenState extends State<RecentViewScreen> {
                   ],
                 ));
           }
-          return Container();
+          return Padding(
+            padding: EdgeInsets.all(10),
+            child: Text(
+              "Bạn chưa xem gì",
+              style: TextStyle(fontSize: 18),
+            ),
+          );
         });
   }
 }

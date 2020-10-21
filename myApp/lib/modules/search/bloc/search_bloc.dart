@@ -19,7 +19,6 @@ class SearchBloc {
   SearchBloc() {
     _searchStreamController = new StreamController<Response<SearchResponse>>();
     _searchService = new SearchService();
-    _searchKeyList = new List<String>(5);
   }
 
   searchProduct(String q, int p) async {
@@ -34,22 +33,28 @@ class SearchBloc {
 
   Future<bool> addSearchKeyList(String key) async {
     final SharedPreferences prefs = await _prefs;
-    listFIFOAction(_searchKeyList);
-    _searchKeyList[0] = key;
-    prefs.setStringList('recent_search', _searchKeyList);
-  }
+    List<String> _searchKeyList;
+    _searchKeyList = await getSearchKeyList();
 
-  void listFIFOAction(List<String> list) {
-    var length = list.length;
-    for (var i = length - 1; i > 0; i--) {
-      list[i] = list[i - 1];
+    if (_searchKeyList.length == 0) {
+      _searchKeyList.insert(0, key);
     }
+
+    if (_searchKeyList.length > 0) {
+      for (var index = 0; index < _searchKeyList.length; index++) {
+        if (_searchKeyList[index] == key) _searchKeyList.removeAt(index);
+      }
+      _searchKeyList.insert(0, key);
+      if (_searchKeyList.length > 6) _searchKeyList.removeLast();
+    }
+    await prefs.setStringList('recent_search', _searchKeyList);
+
+    return true;
   }
 
   Future<List<String>> getSearchKeyList() async {
     final SharedPreferences prefs = await _prefs;
-    if (prefs.getStringList('recent_search') != null)
-      _searchKeyList = prefs.getStringList('recent_search');
+    _searchKeyList = prefs.getStringList('recent_search') ?? List<String>();
     return _searchKeyList;
   }
 }

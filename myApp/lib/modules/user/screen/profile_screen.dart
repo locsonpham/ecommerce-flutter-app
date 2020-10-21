@@ -32,7 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tài khoản"),
+        title: Text("Thông tin tài khoản"),
       ),
       body: _bodyBuidler(),
     );
@@ -59,147 +59,144 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _bodyBuidler() {
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(20),
         child: Center(
           child: Column(
             children: <Widget>[
               InkWell(
                 onTap: () {},
-                child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Expanded(
-                          flex: 3,
-                          child: Container(
-                            height: 100,
-                            width: 100,
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              // color: Colors.red,
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                fit: BoxFit.contain,
-                                image: (_user.avatar == null)
-                                    ? AssetImage('assets/default_avatar.png')
-                                    : NetworkImage(_user.avatar),
-                              ),
-                            ),
-                          ),
+                child: Container(
+                  height: 80,
+                  width: 80,
+                  margin: EdgeInsets.only(top: 10, bottom: 20),
+                  decoration: BoxDecoration(
+                    // color: Colors.red,
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      fit: BoxFit.contain,
+                      image: (_user.avatar == null)
+                          ? AssetImage('assets/default_avatar.png')
+                          : NetworkImage(_user.avatar),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        flex: 1,
+                        child: Icon(
+                          Icons.account_circle,
+                          color: Colors.grey,
+                        )),
+                    Expanded(
+                      flex: 8,
+                      child: TextField(
+                        controller: TextEditingController(text: _user.name),
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          labelText: "Họ và tên",
                         ),
-                        Expanded(
-                            flex: 6,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    _user.name,
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                  Text(
-                                    _user.email,
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.grey),
-                                  )
-                                ],
-                              ),
-                            )),
-                        Icon(Icons.arrow_right),
-                      ],
-                    )),
-              ),
-              Container(height: 1, color: Colors.grey),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => OrderListScreen()));
-                },
-                child: Padding(
-                  padding: EdgeInsets.all(5),
-                  child: ListTile(
-                    leading: Icon(Icons.history),
-                    title: Text("Đơn hàng"),
-                    trailing: Icon(Icons.arrow_right),
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Container(height: 1, color: Colors.grey),
-              InkWell(
-                onTap: () {},
-                child: Padding(
-                  padding: EdgeInsets.all(5),
-                  child: ListTile(
-                    leading: Icon(Icons.contacts),
-                    title: Text("Yêu cầu khảo sát và báo giá"),
-                    trailing: Icon(Icons.arrow_right),
-                  ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        flex: 1,
+                        child: Icon(
+                          Icons.phone,
+                          color: Colors.grey,
+                        )),
+                    Expanded(
+                      flex: 8,
+                      child: TextField(
+                        controller: TextEditingController(text: _user.phone),
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          labelText: "Số điện thoại",
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Container(height: 1, color: Colors.grey),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => WishListScreen()));
-                },
-                child: Padding(
-                  padding: EdgeInsets.all(5),
-                  child: ListTile(
-                    leading: Icon(Icons.favorite),
-                    title: Text("Yêu thích của tôi"),
-                    trailing: Icon(Icons.arrow_right),
-                  ),
-                ),
-              ),
-              Container(height: 1, color: Colors.grey),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RecentViewScreen()));
-                },
-                child: Padding(
-                  padding: EdgeInsets.all(5),
-                  child: ListTile(
-                    leading: Icon(Icons.visibility),
-                    title: Text("Sản phẩm vừa xem"),
-                    trailing: Icon(Icons.arrow_right),
-                  ),
-                ),
-              ),
-              Container(height: 1, color: Colors.grey),
-              InkWell(
-                onTap: () {},
-                child: Padding(
-                  padding: EdgeInsets.all(5),
-                  child: ListTile(
-                    leading: Icon(Icons.edit),
-                    title: Text("Đánh giá dịch vụ"),
-                    trailing: Icon(Icons.arrow_right),
-                  ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        flex: 1,
+                        child: Icon(
+                          Icons.add_location,
+                          color: Colors.grey,
+                        )),
+                    Expanded(
+                      flex: 8,
+                      child: TextField(
+                        controller: TextEditingController(text: _user.address),
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          labelText: "Địa chỉ",
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Container(height: 1, color: Colors.grey),
               SizedBox(
+                height: 30,
+              ),
+              Container(
+                color: Colors.white54,
+                child: InkWell(
+                  onTap: () {},
+                  child: Padding(
+                    padding: EdgeInsets.all(5),
+                    child: ListTile(
+                      leading: Icon(Icons.lock),
+                      title: Text("Đổi mật khẩu"),
+                      trailing: Icon(Icons.arrow_right),
+                    ),
+                  ),
+                ),
+              ),
+              Container(height: 3),
+              Container(
+                color: Colors.white54,
+                child: InkWell(
+                  onTap: () {
+                    _clearUserData();
+                    Navigator.push((context),
+                        MaterialPageRoute(builder: (context) => HomeScreen()));
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(5),
+                    child: ListTile(
+                      leading: Icon(Icons.exit_to_app),
+                      title: Text("Đăng xuất"),
+                      trailing: Icon(Icons.arrow_right),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
                 height: 50,
               ),
               GestureDetector(
-                onTap: () {
-                  _clearUserData();
-                  Navigator.push((context),
-                      MaterialPageRoute(builder: (context) => HomeScreen()));
-                },
+                onTap: () {},
                 child: Padding(
                   padding: EdgeInsets.all(10),
                   child: Container(
-                      width: 150,
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: Colors.red[300],
@@ -207,7 +204,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       child: Center(
                           child: Text(
-                        "Log out",
+                        "Cập nhật",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,

@@ -27,7 +27,7 @@ class CartService {
   }
 
   Future<ServerResponse> removeCart(String cartId) async {
-    final response = await _provider.delete("cart/remove", {"cart_id": cartId});
+    final response = await _provider.delete("cart/delete/${cartId}");
     return ServerResponse.fromJson(response);
   }
 }

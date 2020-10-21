@@ -4,6 +4,7 @@ import 'package:http_request/modules/cart/model/cart_model.dart';
 import 'package:http_request/modules/product_detail/screen/product_detail_screen.dart';
 import 'package:http_request/networking/response.dart';
 import 'package:http_request/pages/loading_screen.dart';
+import 'package:http_request/utils/showAlert.dart';
 import 'package:http_request/utils/string_utils.dart';
 
 class CartScreen extends StatefulWidget {
@@ -200,7 +201,13 @@ class _CartScreenState extends State<CartScreen> {
                               color: Colors.blue[500],
                             ),
                             onPressed: () {
-                              _bloc.removeCart(item.cartId);
+                              _bloc.removeCart(item.cartId).then((result) {
+                                if (result.code == 200) {
+                                  showAlert(context, "Thông báo",
+                                      "Xóa sản phẩm thành công");
+                                  _bloc.getCartList();
+                                }
+                              });
                             }),
                       ],
                     ),

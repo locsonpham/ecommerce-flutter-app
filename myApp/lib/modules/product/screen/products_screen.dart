@@ -40,6 +40,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.name}'),
+        actions: <Widget>[
+          new Container(),
+        ],
       ),
       body: _bodyBuilder(context),
       endDrawer: _drawerBuilder(context),
@@ -68,15 +71,24 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       "Bộ lọc sản phẩm",
                       style: TextStyle(color: Colors.grey, fontSize: 18),
                     ),
-                    trailing: Icon(Icons.close),
+                    trailing: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(Icons.close)),
                   )),
               Container(
                 padding:
                     EdgeInsets.only(top: 15, left: 10, bottom: 15, right: 10),
                 decoration: BoxDecoration(
                     // color: Colors.red,
-                    border: Border(bottom: BorderSide(width: 0.5))),
+                    // border: Border(bottom: BorderSide(width: 0.5)),
+                    ),
                 child: Text("Khoảng giá"),
+              ),
+              Container(
+                height: 0.5,
+                color: Colors.grey,
               ),
               Container(
                 padding: EdgeInsets.all(10),
@@ -86,20 +98,26 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   children: <Widget>[
                     Container(
                         width: 100,
-                        height: 30,
+                        height: 40,
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                         child: TextFormField(
                           controller: _txtMinPrice,
+                          textAlign: TextAlign.end,
+                          textAlignVertical: TextAlignVertical.center,
                           decoration: InputDecoration(
-                            labelText: "Nhỏ nhất (đ)",
-                            labelStyle: TextStyle(fontSize: 12),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.grey, width: 0.5),
-                              borderRadius: const BorderRadius.all(
-                                  const Radius.circular(20.0)),
-                            ),
+                            // labelText: "Nhỏ nhất (đ)",
+                            labelStyle: TextStyle(fontSize: 10),
+                            border: InputBorder.none,
                           ),
                           keyboardType: TextInputType.number,
+                          onFieldSubmitted: (value) {
+                            if (value == "" || value == null)
+                              _txtMinPrice.text = "0";
+                          },
                         )),
                     Padding(
                       padding: const EdgeInsets.only(left: 15, right: 15),
@@ -107,20 +125,25 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     ),
                     Container(
                         width: 100,
-                        height: 30,
+                        height: 40,
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                         child: TextFormField(
                           controller: _txtMaxPrice,
+                          textAlign: TextAlign.end,
                           decoration: InputDecoration(
-                            labelText: "Lớn nhất (đ)",
-                            labelStyle: TextStyle(fontSize: 12),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.grey, width: 0.5),
-                              borderRadius: const BorderRadius.all(
-                                  const Radius.circular(20.0)),
-                            ),
+                            // labelText: "Lớn nhất (đ)",
+                            labelStyle: TextStyle(fontSize: 10),
+                            border: InputBorder.none,
                           ),
                           keyboardType: TextInputType.number,
+                          onFieldSubmitted: (value) {
+                            if (value == "" || value == null)
+                              _txtMaxPrice.text = "0";
+                          },
                         )),
                   ],
                 ),
@@ -332,9 +355,15 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       Text(
                         "Sắp xếp theo",
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w500),
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
                       ),
-                      Icon(Icons.clear),
+                      InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Icon(Icons.clear)),
                     ],
                   ),
                 ),
@@ -366,26 +395,22 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 });
               },
               child: Container(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                     border: Border(
                   top: (index == 0) ? BorderSide(width: 1.0) : BorderSide.none,
                   bottom: BorderSide(width: 0.3),
                 )),
                 child: ListTile(
-                  title: Text(_sortCommands[index].title),
+                  title: Text(
+                    _sortCommands[index].title,
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle1
+                        .copyWith(color: Colors.grey),
+                  ),
                   trailing: Icon(Icons.chevron_right),
                 ),
-                // child: Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: <Widget>[
-                //     Text(
-                //       _sortCommands[index].title,
-                //       style: TextStyle(color: Colors.grey),
-                //     ),
-                //     Icon(Icons.chevron_right),
-                //   ],
-                // ),
               ),
             );
           }),
