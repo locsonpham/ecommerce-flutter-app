@@ -40,12 +40,12 @@ class RecentViewBloc {
     return productsJson;
   }
 
-  Future<List<ProductDetailModel>> getRecentProductList() async {
-    List<ProductDetailModel> _products = List<ProductDetailModel>();
-    ProductDetailService _productService = ProductDetailService();
+  // Future<List<ProductDetailModel>> getRecentProductList() async {
+  //   List<ProductDetailModel> _products = List<ProductDetailModel>();
+  //   ProductDetailService _productService = ProductDetailService();
 
-    List<String> _recentProducts = await getRecentProduct();
-    for (var index = _recentProducts.length - 1; index >= 0; index--) {}
-    return _products;
-  }
+  //   List<String> _recentProducts = await getRecentProduct();
+  //   for (var index = _recentProducts.length - 1; index >= 0; index--) {}
+  //   return _products;
+  // }
 }

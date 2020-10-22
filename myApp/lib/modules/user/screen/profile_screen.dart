@@ -3,6 +3,7 @@ import 'package:http_request/modules/auth/model/user_model.dart';
 import 'package:http_request/modules/home/screen/home_screen.dart';
 import 'package:http_request/modules/order/screen/order_list_screen.dart';
 import 'package:http_request/modules/recent_view/screen/recentview_screen.dart';
+import 'package:http_request/modules/user/bloc/profile_bloc.dart';
 import 'package:http_request/modules/wishlist/screen/wishlist_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,11 +14,18 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   UserInfo _user;
+  ProfileBloc _bloc;
+  TextEditingController _nameInputController;
+  TextEditingController _emailInputController;
+  TextEditingController _phoneInputController;
+  TextEditingController _addressInputController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _bloc = ProfileBloc();
+
     _user = new UserInfo();
     _user.name = "";
     _user.avatar = null;
@@ -26,6 +34,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _user.address1 = "";
     _user.email = "";
     _loadUserData();
+    _nameInputController = TextEditingController(text: _user.name);
+    _emailInputController = TextEditingController(text: _user.email);
+    _phoneInputController = TextEditingController(text: _user.phone);
+    _addressInputController = TextEditingController(text: _user.address);
   }
 
   @override
@@ -47,13 +59,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _user.address = prefs.getString('user_address') ?? "";
       _user.address1 = prefs.getString('user_address1') ?? "";
       _user.email = prefs.getString('user_email') ?? "";
+
+      _nameInputController.text = _user.name;
+      _phoneInputController.text = _user.phone;
+      _addressInputController.text = _user.address;
     });
     return true;
   }
 
   Future<bool> _clearUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('access_token');
+    await prefs.remove('access_token');
   }
 
   Widget _bodyBuidler() {
@@ -94,7 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Expanded(
                       flex: 8,
                       child: TextField(
-                        controller: TextEditingController(text: _user.name),
+                        controller: _nameInputController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           labelText: "Họ và tên",
@@ -118,7 +134,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Expanded(
                       flex: 8,
                       child: TextField(
-                        controller: TextEditingController(text: _user.phone),
+                        controller: _phoneInputController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           labelText: "Số điện thoại",
@@ -142,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Expanded(
                       flex: 8,
                       child: TextField(
-                        controller: TextEditingController(text: _user.address),
+                        controller: _addressInputController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           labelText: "Địa chỉ",
@@ -176,8 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: InkWell(
                   onTap: () {
                     _clearUserData();
-                    Navigator.push((context),
-                        MaterialPageRoute(builder: (context) => HomeScreen()));
+                    Navigator.pushNamed(context, "/mainScreen");
                   },
                   child: Padding(
                     padding: EdgeInsets.all(5),
@@ -193,7 +208,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 height: 50,
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  updateUserProfile();
+                },
                 child: Padding(
                   padding: EdgeInsets.all(10),
                   child: Container(
@@ -217,5 +234,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
+  }
+
+  void updateUserProfile() {
+    var params = Map<String, dynamic>();
+    params["name"] = (_nameInputController.value.text.isEmpty)
+        ? ""
+        : _nameInputController.value.text;
+    // params["email"] = (_emailInputController.value.text == null)
+    //     ? ""
+    //     : _phoneInputController.value.text;
+    params["phone"] = (_phoneInputController.value.text.isEmpty)
+        ? ""
+        : _addressInputController.value.text;
+    params["name"] = (_addressInputController.value.text.isEmpty)
+        ? ""
+        : _addressInputController.value.text;
+
+    _bloc.updateUserProfile(params).then((value) => null);
   }
 }

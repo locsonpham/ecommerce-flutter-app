@@ -227,21 +227,19 @@ class _LoginScreenState extends State<LoginScreen> {
         if (data.code != 200) {
           return showAlert(context, "Error", data.message);
         } else {
-          // _goToHome();
-          Navigator.pop(context);
+          _goMainScreen();
+          // Navigator.pop(context);
         }
       });
     }
   }
 
-  void _goToHome() {
-    Navigator.pushNamed(context, "/home").then((result) => print(result));
+  void _goMainScreen() {
+    Navigator.pushNamed(context, "/mainScreen");
   }
 
   void _goToUser() {
-    void goToHome() {
-      Navigator.pushNamed(context, "/user").then((result) => print(result));
-    }
+    Navigator.pushNamed(context, "/user");
   }
 
   Widget _forgotPassword() {

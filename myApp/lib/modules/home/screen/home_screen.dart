@@ -1,6 +1,7 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http_request/base/share_reference_manager.dart';
 import 'package:http_request/data/data.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -50,15 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
         cartTotal = value;
       });
     });
-  }
-
-  Future<bool> getAccessToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _access_token = (prefs.getString('access_token') ?? null);
-    if (_access_token != null)
-      return true;
-    else
-      return false;
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http_request/base/share_reference_manager.dart';
 import 'package:http_request/modules/cart/screen/cart_screen.dart';
 import 'package:http_request/modules/home/screen/home_screen.dart';
 import 'package:http_request/modules/user/screen/user_screen.dart';
@@ -25,6 +26,8 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
         return CartScreen();
       case 4:
         return UserScreen();
+      // Navigator.of(context)
+      //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
       default:
         return HomeScreen();
     }

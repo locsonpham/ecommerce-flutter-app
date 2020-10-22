@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http_request/base/share_reference_manager.dart';
 import 'package:http_request/modules/auth/model/user_model.dart';
 import 'package:http_request/modules/home/screen/home_screen.dart';
 import 'package:http_request/modules/order/screen/order_list_screen.dart';
@@ -28,12 +29,19 @@ class _UserScreenState extends State<UserScreen> {
     _user.address1 = "";
     _user.email = "";
     _loadUserData();
+
+    getAccessToken().then((token) {
+      if (token == null) {
+        Navigator.pushNamed(context, "/login");
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: new Container(),
         title: Text("Tài khoản"),
       ),
       body: _bodyBuidler(),
@@ -51,11 +59,6 @@ class _UserScreenState extends State<UserScreen> {
       _user.email = prefs.getString('user_email') ?? "";
     });
     return true;
-  }
-
-  Future<bool> _clearUserData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('access_token');
   }
 
   Widget _bodyBuidler() {
