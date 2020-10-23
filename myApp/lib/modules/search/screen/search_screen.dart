@@ -127,9 +127,10 @@ class _SearchScreenState extends State<SearchScreen> {
                     EdgeInsets.only(top: 10, left: 20, bottom: 10, right: 20),
                 margin: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    border: Border.all(color: Colors.grey)),
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  // border: Border.all(color: Colors.grey),
+                ),
                 child: Center(child: Text(_recentSearch[index])),
               ),
             );

@@ -5,6 +5,8 @@ import 'package:http_request/modules/order/screen/order_list_screen.dart';
 import 'package:http_request/modules/recent_view/screen/recentview_screen.dart';
 import 'package:http_request/modules/user/bloc/profile_bloc.dart';
 import 'package:http_request/modules/wishlist/screen/wishlist_screen.dart';
+import 'package:http_request/networking/response.dart';
+import 'package:http_request/utils/showAlert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -192,7 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: InkWell(
                   onTap: () {
                     _clearUserData();
-                    Navigator.pushNamed(context, "/mainScreen");
+                    Navigator.pushReplacementNamed(context, "/mainScreen");
                   },
                   child: Padding(
                     padding: EdgeInsets.all(5),
@@ -238,19 +240,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void updateUserProfile() {
     var params = Map<String, dynamic>();
-    params["name"] = (_nameInputController.value.text.isEmpty)
-        ? ""
-        : _nameInputController.value.text;
-    // params["email"] = (_emailInputController.value.text == null)
-    //     ? ""
-    //     : _phoneInputController.value.text;
-    params["phone"] = (_phoneInputController.value.text.isEmpty)
-        ? ""
-        : _addressInputController.value.text;
-    params["name"] = (_addressInputController.value.text.isEmpty)
-        ? ""
-        : _addressInputController.value.text;
+    if (_nameInputController.value.text.isNotEmpty)
+      params["name"] = (_nameInputController.value.text);
 
-    _bloc.updateUserProfile(params).then((value) => null);
+    if (_phoneInputController.value.text.isNotEmpty)
+      params["phone"] = (_phoneInputController.value.text);
+
+    if (_addressInputController.value.text.isNotEmpty)
+      params["address"] = (_addressInputController.value.text);
+
+    _bloc.updateUserProfile(params).then((res) {
+      if (res.code == 200) {
+        showAlert(context, "Message", res.message);
+        updateUserInfo();
+      }
+    });
+  }
+
+  Future updateUserInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (_nameInputController.value.text.isNotEmpty)
+      await prefs.setString('user_name', _nameInputController.value.text);
+
+    if (_phoneInputController.value.text.isNotEmpty)
+      await prefs.setString('user_phone', _phoneInputController.value.text);
+
+    if (_addressInputController.value.text.isNotEmpty)
+      await prefs.setString('user_address', _addressInputController.value.text);
   }
 }

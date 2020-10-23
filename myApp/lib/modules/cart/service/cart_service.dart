@@ -12,7 +12,7 @@ class CartService {
   }
 
   Future<ServerResponse> getCartTotal() async {
-    final response = await _provider.get("/cart/total");
+    final response = await _provider.get("cart/total");
     return ServerResponse.fromJson(response);
   }
 

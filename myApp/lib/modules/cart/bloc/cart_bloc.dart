@@ -18,7 +18,7 @@ class CartBloc {
 
   getCartList() async {
     try {
-      // cartSink.add(Response.loading("Loading"));
+      cartSink.add(Response.loading("Loading"));
       ServerResponse cartList = await _cartService.getCart();
       cartSink.add(Response.completed(cartList));
     } catch (e) {

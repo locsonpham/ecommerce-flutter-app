@@ -26,7 +26,10 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Giỏ hàng")),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("Giỏ hàng"),
+      ),
       body: StreamBuilder<Response<ServerResponse>>(
           stream: _bloc.cartStream,
           builder: (context, snapshot) {
@@ -49,6 +52,11 @@ class _CartScreenState extends State<CartScreen> {
 
   Widget _bodyBuilder(BuildContext context, AsyncSnapshot snapshot) {
     var products = List();
+    if (snapshot.data.data.code == null)
+      return Container(
+        padding: EdgeInsets.all(10),
+        child: Center(child: Text("Bạn chưa có sản phẩm nào trong giỏ hàng")),
+      );
     products = snapshot.data.data.data["products"];
 
     if (products.length == 0) {
@@ -63,7 +71,7 @@ class _CartScreenState extends State<CartScreen> {
             ),
             RaisedButton(
               onPressed: () {
-                Navigator.pushNamed(context, "/home");
+                Navigator.pushReplacementNamed(context, "/mainScreen");
               },
               color: Colors.blueAccent,
               child: Text("Tiếp tục mua sắm"),

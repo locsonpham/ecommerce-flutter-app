@@ -45,11 +45,14 @@ class _HomeScreenState extends State<HomeScreen> {
     _cartBloc = new CartBloc();
     _cartTotalBloc = new CartTotalBloc();
     _cartTotalBloc.getCartTotal();
-    getAccessToken();
-    _cartBloc.getCartTotal().then((value) {
-      setState(() {
-        cartTotal = value;
-      });
+    getAccessToken().then((token) {
+      if (token != null) {
+        _cartBloc.getCartTotal().then((value) {
+          setState(() {
+            cartTotal = value;
+          });
+        });
+      }
     });
   }
 
@@ -74,7 +77,10 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () {
             Navigator.pushNamed(context, "/search");
           },
-          icon: Icon(Icons.search),
+          icon: Icon(
+            Icons.search,
+            color: Colors.white,
+          ),
         ),
         // Phone
         // IconButton(
@@ -82,80 +88,11 @@ class _HomeScreenState extends State<HomeScreen> {
         //   onPressed: () {},
         // ),
         // Cart
-        IconButton(
-          icon: cartWidget(context, _cartTotalBloc),
-          onPressed: () {},
-        )
+        // IconButton(
+        //   icon: cartWidget(context, _cartTotalBloc),
+        //   onPressed: () {},
+        // )
       ],
-    );
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    // if (index == 3) {
-    //   Navigator.pushNamed(context, "/cart");
-    // }
-    // if (index == 4) {
-    //   getAccessToken().then((isExist) {
-    //     if (isExist == false) {
-    //       Navigator.push(
-    //           context, MaterialPageRoute(builder: (context) => LoginScreen()));
-    //     } else {
-    //       Navigator.push(
-    //           context, MaterialPageRoute(builder: (context) => UserScreen()));
-    //     }
-    //   });
-    // }
-  }
-
-  static const List<Widget> _screenOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-    ),
-    Text(
-      'Index 1: Tin nhan',
-    ),
-    Text(
-      'Index 3: Thong bao',
-    ),
-    Text(
-      'Index 4: Gio hang',
-    ),
-    Text(
-      'Index 5: Tai khoan',
-    ),
-  ];
-
-  Widget _buildBottomNav(BuildContext context) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          title: Text('Trang chủ'),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.message),
-          title: Text('Tin nhắn'),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.notifications),
-          title: Text('Thông báo'),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.shopping_cart),
-          title: Text('Giỏ hàng'),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.account_circle),
-          title: Text('Tài khoản'),
-        ),
-      ],
-      currentIndex: _selectedIndex,
-      selectedItemColor: Colors.blue[500],
-      onTap: _onItemTapped,
     );
   }
 

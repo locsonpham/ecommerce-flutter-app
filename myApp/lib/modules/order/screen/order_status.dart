@@ -30,7 +30,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: new Container(),
+        // leading: new Container(),
         title: Text("Đặt hàng"),
       ),
       body: _bodyBuilder(context),
@@ -91,7 +91,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           ),
           RaisedButton(
             onPressed: () {
-              Navigator.pushNamed(context, "/home");
+              Navigator.pushReplacementNamed(context, "/mainScreen");
             },
             color: Colors.blueAccent,
             child: Padding(

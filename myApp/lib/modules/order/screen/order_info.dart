@@ -108,7 +108,7 @@ class _CheckOutInfoScreenState extends State<CheckOutInfoScreen> {
                           : _commentController.value.text;
                   order.products = (_cartList.isNotEmpty) ? _cartList : [];
 
-                  Navigator.push(
+                  Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (context) => CheckOutScreen(order)));

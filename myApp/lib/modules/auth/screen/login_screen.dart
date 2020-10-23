@@ -235,7 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _goMainScreen() {
-    Navigator.pushNamed(context, "/mainScreen");
+    Navigator.pushReplacementNamed(context, "/mainScreen");
   }
 
   void _goToUser() {

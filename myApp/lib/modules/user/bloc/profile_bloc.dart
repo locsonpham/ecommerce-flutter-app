@@ -4,15 +4,14 @@ import 'package:http_request/networking/response.dart';
 class ProfileBloc {
   ProfileService _service;
 
-  ProfileClass() {
+  ProfileBloc() {
     _service = ProfileService();
   }
 
   Future<ServerResponse> updateUserProfile(Map<String, dynamic> params) async {
     try {
-      print(params);
-      // ServerResponse response = await _service.updateUserProfile(params);
-      // print(response);
+      ServerResponse response = await _service.updateUserProfile(params);
+      return response;
     } catch (e) {
       print(e.toString());
     }

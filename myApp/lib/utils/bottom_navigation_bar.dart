@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http_request/modules/cart/bloc/cart_bloc.dart';
 import 'package:http_request/base/share_reference_manager.dart';
 import 'package:http_request/modules/cart/screen/cart_screen.dart';
 import 'package:http_request/modules/home/screen/home_screen.dart';
@@ -10,10 +11,20 @@ class bottomNavigationBar extends StatefulWidget {
 }
 
 class _bottomNavigationBarState extends State<bottomNavigationBar> {
+  String _token;
+  CartBloc _cartBloc;
+  int _cartTotal = 0;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _cartBloc = CartBloc();
+    _cartBloc.getCartTotal().then((value) {
+      setState(() {
+        _cartTotal = value;
+      });
+    });
   }
 
   int currentIndex = 0;
@@ -26,8 +37,6 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
         return CartScreen();
       case 4:
         return UserScreen();
-      // Navigator.of(context)
-      //     .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
       default:
         return HomeScreen();
     }
@@ -37,68 +46,97 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: callPage(currentIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Trang chủ'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            title: Text('Tin nhắn'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            title: Text('Thông báo'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            title: Text('Giỏ hàng'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            title: Text('Tài khoản'),
-          ),
-        ],
-        currentIndex: currentIndex,
-        selectedItemColor: Colors.blue[500],
-        onTap: (value) {
-          currentIndex = value;
-          setState(() {});
-        },
+      bottomNavigationBar: SizedBox(
+        height: 70,
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Icon(Icons.home),
+              ),
+              title: Text('Trang chủ'),
+            ),
+            BottomNavigationBarItem(
+              icon: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Icon(Icons.message),
+              ),
+              title: Text('Tin nhắn'),
+            ),
+            BottomNavigationBarItem(
+              icon: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Icon(Icons.notifications),
+              ),
+              title: Text('Thông báo'),
+            ),
+            BottomNavigationBarItem(
+              icon: cartTotal(_cartTotal),
+              title: Text('Giỏ hàng'),
+            ),
+            BottomNavigationBarItem(
+              icon: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Icon(Icons.account_circle),
+              ),
+              title: Text('Tài khoản'),
+            ),
+          ],
+          currentIndex: currentIndex,
+          selectedItemColor: Colors.green[500],
+          onTap: (value) {
+            currentIndex = value;
+            if (value == 4) {
+              getAccessToken().then((token) {
+                if (token == null) {
+                  // _token = token;
+                  // setState(() {});
+                  Navigator.pushNamed(context, "/login");
+                } else
+                  setState(() {});
+              });
+            } else {
+              setState(() {});
+            }
+          },
+        ),
       ),
     );
   }
 
-  Widget cartTotal() {
+  Widget cartTotal(int total) {
     return Container(
       child: Stack(
+        alignment: Alignment.center,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(5.0),
+            padding: EdgeInsets.all(5),
             child: Icon(Icons.shopping_cart),
           ),
-          Positioned(
-              top: 0,
-              right: 0,
-              child: Container(
-                width: 20,
-                padding: EdgeInsets.all(3),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.red,
-                ),
-                child: Center(
-                  child: Text(
-                    "1",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
+          (total > 0)
+              ? Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    width: 20,
+                    padding: EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.red,
                     ),
-                  ),
-                ),
-              ))
+                    child: Center(
+                      child: Text(
+                        total.toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ))
+              : Container(),
         ],
       ),
     );

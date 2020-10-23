@@ -41,7 +41,8 @@ class _UserScreenState extends State<UserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: new Container(),
+        // leading: new Container(),
+        centerTitle: true,
         title: Text("Tài khoản"),
       ),
       body: _bodyBuidler(),
