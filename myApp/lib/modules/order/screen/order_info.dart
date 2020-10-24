@@ -108,10 +108,12 @@ class _CheckOutInfoScreenState extends State<CheckOutInfoScreen> {
                           : _commentController.value.text;
                   order.products = (_cartList.isNotEmpty) ? _cartList : [];
 
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CheckOutScreen(order)));
+                  checkoutAction(order);
+
+                  // Navigator.pushReplacement(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => CheckOutScreen(order)));
                 },
                 child: Container(
                   height: 50,
@@ -132,6 +134,20 @@ class _CheckOutInfoScreenState extends State<CheckOutInfoScreen> {
         ),
       ],
     );
+  }
+
+  void checkoutAction(OrderInfo orderInfo) {
+    _orderBloc.checkoutAction(orderInfo).then((response) {
+      // print(response);
+      if (response.code == 200) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CheckOutScreen(
+                      res: response,
+                    )));
+      }
+    });
   }
 
   Widget _customerInfo() {

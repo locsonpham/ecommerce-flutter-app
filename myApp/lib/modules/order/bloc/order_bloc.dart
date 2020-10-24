@@ -38,6 +38,27 @@ class OrderBloc {
     }
   }
 
+  Future<ServerResponse> checkoutAction(OrderInfo orderInfo) async {
+    Completer<ServerResponse> _completer = new Completer();
+    var _params = Map<String, dynamic>();
+
+    _params["customer"] = orderInfo.customer.toJson();
+    _params["products"] = List();
+
+    orderInfo.products.forEach((x) {
+      _params["products"].add(x.toJson());
+    });
+
+    try {
+      ServerResponse response = await _service.checkoutAction(_params);
+      _completer.complete(response);
+    } catch (e) {
+      _completer.completeError(e);
+    }
+
+    return _completer.future;
+  }
+
   getOrderList() async {
     try {
       orderSink.add(Response.loading("Loading"));

@@ -8,8 +8,9 @@ import 'order_detail_screen.dart';
 
 class CheckOutScreen extends StatefulWidget {
   OrderInfo order;
+  ServerResponse res;
 
-  CheckOutScreen(this.order);
+  CheckOutScreen({this.order, this.res});
 
   @override
   _CheckOutScreenState createState() => _CheckOutScreenState();
@@ -22,8 +23,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _bloc = OrderBloc();
-    _bloc.orderAction(widget.order);
+    // _bloc = OrderBloc();
+    // _bloc.orderAction(widget.order);
   }
 
   @override
@@ -33,7 +34,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         // leading: new Container(),
         title: Text("Đặt hàng"),
       ),
-      body: _bodyBuilder(context),
+      // body: _bodyBuilder(context),
+      body: _bodyBuilder2(widget.res),
     );
   }
 
@@ -61,6 +63,61 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         }
         return Container();
       },
+    );
+  }
+
+  Widget _bodyBuilder2(ServerResponse res) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: Column(
+        children: <Widget>[
+          Image(
+            height: 50,
+            image: AssetImage("assets/success.png"),
+          ),
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: Text("Đặt hàng thành công"),
+          ),
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: Text(
+              "Mã đơn hàng #${res.data["order_id"]}",
+              style: Theme.of(context).textTheme.headline5,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: Text(
+                "Cảm ơn quý khách đã đặt hàng. Nhân viên chúng tôi sẽ gọi lại để xác nhận đơn hàng."),
+          ),
+          RaisedButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, "/mainScreen");
+            },
+            color: Colors.blueAccent,
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: Text("Tiếp tục mua sắm"),
+            ),
+          ),
+          RaisedButton(
+            onPressed: () {
+              ;
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          OrderDetailScreen(res.data["order_id"])));
+            },
+            color: Colors.orangeAccent,
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: Text("Theo dõi đơn hàng"),
+            ),
+          )
+        ],
+      ),
     );
   }
 
